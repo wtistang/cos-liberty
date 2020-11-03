@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.pwte.example</groupId>
+  <artifactId>CustomerOrderServicesApp</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <name>Customer Order Services Application EAR</name>
+  <packaging>ear</packaging>
+ <parent>
+    <artifactId>CustomerOrderServicesParent</artifactId>
+    <groupId>org.pwte.example</groupId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+  <dependencies>
+    <dependency>
+      <groupId>org.pwte.example</groupId>
+      <artifactId>CustomerOrderServices</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+      <type>ejb</type>
+    </dependency>
+    <dependency>
+      <groupId>org.pwte.example</groupId>
+      <artifactId>CustomerOrderServicesWeb</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.pwte.example</groupId>
+      <artifactId>CustomerOrderServicesTest</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+      <type>war</type>
+    </dependency>
+<dependency>
+      <groupId>net.wasdev.maven.tools.targets</groupId>
+      <artifactId>third-party</artifactId>
+      <version>RELEASE</version>
+      <type>pom</type>
+      <scope>provided</scope>
+</dependency>
+<dependency>
+      <groupId>net.wasdev.maven.tools.targets</groupId>
+      <artifactId>java-specs</artifactId>
+      <version>RELEASE</version>
+      <type>pom</type>
+      <scope>provided</scope>
+</dependency>
+<dependency>
+      <groupId>net.wasdev.maven.tools.targets</groupId>
+      <artifactId>liberty-spis</artifactId>
+      <version>RELEASE</version>
+      <type>pom</type>
+      <scope>provided</scope>
+</dependency>
+  </dependencies>
+  <build>
+    <plugins>
+
+<plugin>
+       <groupId>io.openliberty.tools</groupId>
+       <artifactId>liberty-maven-plugin</artifactId>
+       				<version>3.2</version>
+       <configuration>
+         <runtimeArtifact>
+            <groupId>com.ibm.websphere.appserver.runtime</groupId>
+            <artifactId>wlp-webProfile7</artifactId>
+            <version>20.0.0.3</version>
+            <type>zip</type>
+        </runtimeArtifact>
+           <appsDirectory>apps</appsDirectory>
+       </configuration>
+   </plugin>
+
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.6.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <!-- The ear plugin must include the definition for "modules", for any				modules that are needed to be included in the EAR file, you need to specify				them one by one, e.g. "ejbModule", "webModule", "jarModule" and "appClientModule". -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-ear-plugin</artifactId>
+        <version>3.0.2</version>
+        <configuration>
+          <version>5</version>
+          <generateModuleId>true</generateModuleId>
+          <finalName>CustomerOrderServicesApp-0.1.0-SNAPSHOT</finalName>
+          <outputDirectory>${basedir}/target</outputDirectory>
+          <modules>
+            <ejbModule>
+              <groupId>org.pwte.example</groupId>
+              <artifactId>CustomerOrderServices</artifactId>
+              <bundleFileName>CustomerOrderServices.jar</bundleFileName>
+            </ejbModule>
+            <webModule>
+              <groupId>org.pwte.example</groupId>
+              <artifactId>CustomerOrderServicesWeb</artifactId>
+              <context-root>CustomerOrderServicesWeb</context-root>
+              <bundleFileName>CustomerOrderServicesWeb.war</bundleFileName>
+            </webModule>
+            <webModule>
+              <groupId>org.pwte.example</groupId>
+              <artifactId>CustomerOrderServicesTest</artifactId>
+              <context-root>CustomerOrderServicesTest</context-root>
+              <bundleFileName>CustomerOrderServicesTest.war</bundleFileName>
+            </webModule>
+          </modules>
+          <earSourceDirectory>${basedir}</earSourceDirectory>
+          <earSourceIncludes>**/ibmconfig/**,**/ibm-application-bnd.xml,lib/**</earSourceIncludes>
+          <earSourceExcludes>**/target/**</earSourceExcludes>
+          <security>
+            <security-role>
+              <role-name>SecureShopper</role-name>
+            </security-role>
+          </security>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
